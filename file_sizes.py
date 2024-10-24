@@ -9,6 +9,7 @@ Example directory - 'dir_path_url'
 """
 
 from pathlib import Path 
+import sys
 
 def get_filesizes(directory):
 	"""Walk through the directory and create a dict with filenames as keys and the file sizes 
@@ -19,18 +20,14 @@ def get_filesizes(directory):
 	dir_path = Path(directory)
 
 	# Iterate through all the files in the directory (excluding subfolders)
+	print(f"Directory being processed: {dir_path}")
+
 	for file_path in dir_path.iterdir():
 		# Check if it's a file (not a directory)
 		if file_path.is_file():
 			folder_dict[file_path.name] = file_path.stat().st_size
 
 	return folder_dict
-
-directory = 'dir_path_url'  # Replace with directory path
-
-file_sizes = get_filesizes(directory)
-
-print(file_sizes)
 
 """
 Recursive Version:
@@ -90,11 +87,21 @@ def print_largest_files(directory, n=10):
 		# Print the filename and size in KB
 		print(f"{i}. {filename} - {size/1024:.2f} KB")
 
-directory = 'dir_path_url'  # Replace with directory path
 
-directory_size = get_filesizes_incl_subfolders(directory)
+if __name__ == "__main__":
+	# Check if a command-line argument is provided
+	if len(sys.argv) != 2: 
+		print("Usage: python3 file_sizes.py directory_path")
+		sys.exit(1)
 
-print_largest_files(directory)
+	# Get the directory path from the command-line argument
+	directory = sys.argv[1]
+
+	# Print the largest files in the specified directory
+	print_largest_files(directory)
+
+
+
 
 
 
